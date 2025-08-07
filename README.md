@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 AbhirajGPT – ChatGPT-style Developer Portfolio
 
-## Getting Started
+AbhirajGPT is my **AI-style interactive portfolio**, designed to look and feel like ChatGPT — but instead of using an actual LLM, it responds with curated content about me: my projects, skills, resume, and more.
 
-First, run the development server:
+It's powered by **Next.js**, **Tailwind CSS**, and a touch of creative flair.
+
+---
+
+## 📸 Preview
+
+![AbhirajGPT Screenshot](public/preview.png)
+
+---
+
+## 🚀 Features
+
+- 🧑‍💻 Who am I? — Short intro message
+- 🗂 Projects — Card-style project showcase with images, tech stack, and GitHub links
+- 📄 Resume — Clickable preview + download link
+- 🔗 Contact — Social links + message form
+- 🧠 Tech Stack — Categorized skills in AI, Full Stack, VR
+- ✨ Typing animation — ChatGPT-like letter-by-letter effect
+- 💬 Multiple Q&A entries — Persistent chat history per session
+
+---
+
+## 🛠 Tech Stack
+
+| Frontend       | State & Logic     | Styling        |
+|----------------|-------------------|----------------|
+| Next.js 14     | React `useState`  | Tailwind CSS   |
+| TypeScript     | Custom JSON Data  | Responsive UI  |
+
+---
+
+## 📁 Folder Structure
+
+abhirajgpt/
+├── app/ # App Router pages
+│ └── page.tsx # Main chat interface
+├── components/
+│ └── ProjectCard.tsx # Reusable project card
+├── data/
+│ └── responses.ts # Predefined data (projects, resume, contact)
+├── public/
+│ ├── resume.pdf # Resume file
+│ └── projects/ # Project images
+├── styles/
+│ └── globals.css # Tailwind custom styles
+├── tailwind.config.ts
+└── README.md
+
+
+---
+
+## 🧪 Running Locally
 
 ```bash
+git clone https://github.com/your-username/abhirajgpt.git
+cd abhirajgpt
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000 to explore!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📬 Contact
+Made by Abhiraj Chaudhary
+Find me on GitHub • LinkedIn
+Feel free to fork, clone, or connect!
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🧠 Inspiration
+This project was inspired by:
 
-## Learn More
+ChatGPT’s interface
 
-To learn more about Next.js, take a look at the following resources:
+The need to create a more engaging portfolio than the standard resume site
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+My love for interactive UI/UX and developer storytelling
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+📜 License
+MIT License. Use it, remix it, and make it your own.
+---
