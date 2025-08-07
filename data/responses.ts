@@ -24,9 +24,9 @@ export const projectsData = [
 export const contactData = {
     message: "Feel free to reach out to me or drop your contact details below.",
     links: {
-        email: "mailto:abhirajc@gmail.com",
-        linkedin: "https://linkedin.com/in/abhirajc",
-        github: "https://github.com/abhirajc",
+        email: "mailto:rajabhirajusa@gmail.com",
+        linkedin: "https://www.linkedin.com/in/abhiraj-chaudhary/",
+        github: "https://github.com/Abhiraj03",
         portfolio: "https://abhirajc.com",
     },
 }
