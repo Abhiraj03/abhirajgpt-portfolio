@@ -33,34 +33,6 @@ It's powered by **Next.js**, **Tailwind CSS**, and a touch of creative flair.
 
 ---
 
-## 📁 Folder Structure
-
-abhirajgpt/
-├── app/ # App Router pages
-
-│ └── page.tsx # Main chat interface
-
-├── components/
-│ └── ProjectCard.tsx # Reusable project card
-
-├── data/
-│ └── responses.ts # Predefined data (projects, resume, contact)
-
-├── public/
-│ ├── resume.pdf # Resume file
-
-│ └── projects/ # Project images
-
-├── styles/
-
-│ └── globals.css # Tailwind custom styles
-
-├── tailwind.config.ts
-
-└── README.md
-
-
----
 
 ## 🧪 Running Locally
 
