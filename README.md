@@ -8,7 +8,7 @@ It's powered by **Next.js**, **Tailwind CSS**, and a touch of creative flair.
 
 ## 📸 Preview
 
-![AbhirajGPT Screenshot](public/preview.png)
+![AbhirajGPT Screenshot](public/preview.jpg)
 
 ---
 
