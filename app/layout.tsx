@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AbhirajGPT",
+  title: "AbhirajGPT - Portfolio",
   description: "A personal AI-style portfolio for Abhiraj Chaudhary",
 };
 
