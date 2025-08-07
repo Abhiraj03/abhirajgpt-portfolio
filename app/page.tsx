@@ -15,7 +15,7 @@ export default function Home() {
 
   const promptResponses: Record<string, JSX.Element> = {
     "Who are you?": <p>I'm Abhiraj, a software developer passionate about building AI, VR, and full-stack apps.</p>,
-    "What’s your resume?": (
+    "What's your resume?": (
       <div className="space-y-4">
         <p>{resumeData.message}</p>
         <a href={resumeData.download} download className="underline text-blue-400 hover:text-blue-300">
@@ -92,9 +92,9 @@ export default function Home() {
       </form>
     </div>
     ),
-    "What’s your tech stack?": (
+    "What's your tech stack?": (
       <div className="space-y-6">
-        <p>Here’s what I use across different domains of development:</p>
+        <p>Here&rsquo;s what I use across different domains of development:</p>
 
         {Object.entries(techStackData).map(([category, tools]) => (
           <div key={category}>
