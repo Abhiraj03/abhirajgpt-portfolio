@@ -14,7 +14,7 @@ export default function Home() {
   }
 
   const promptResponses: Record<string, JSX.Element> = {
-    "Who are you?": <p>I'm Abhiraj, a software developer passionate about building AI, VR, and full-stack apps.</p>,
+    "Who are you?": <p>I&rsquo;m Abhiraj, a software developer passionate about building AI, VR, and full-stack apps.</p>,
     "What's your resume?": (
       <div className="space-y-4">
         <p>{resumeData.message}</p>
@@ -30,7 +30,7 @@ export default function Home() {
     ),
     "Show me your projects": (
       <div className='space-y-6'>
-        <p>Here are some of the projects I've worked on:</p>
+        <p>Here are some of the projects I&rsquo;ve worked on:</p>
         <div className='grid gap-6 sm:grid-cols-1 md:grid-cols-2'>
           {projectsData.map((project, index) => (
             <ProjectCard key={index} project={project} />
