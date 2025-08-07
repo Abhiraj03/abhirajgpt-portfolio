@@ -37,17 +37,26 @@ It's powered by **Next.js**, **Tailwind CSS**, and a touch of creative flair.
 
 abhirajgpt/
 ├── app/ # App Router pages
+
 │ └── page.tsx # Main chat interface
+
 ├── components/
 │ └── ProjectCard.tsx # Reusable project card
+
 ├── data/
 │ └── responses.ts # Predefined data (projects, resume, contact)
+
 ├── public/
 │ ├── resume.pdf # Resume file
+
 │ └── projects/ # Project images
+
 ├── styles/
+
 │ └── globals.css # Tailwind custom styles
+
 ├── tailwind.config.ts
+
 └── README.md
 
 
@@ -56,7 +65,7 @@ abhirajgpt/
 ## 🧪 Running Locally
 
 ```bash
-git clone https://github.com/your-username/abhirajgpt.git
+git clone https://github.com/Abhiraj03/abhirajgpt-portfolio.git 
 cd abhirajgpt
 npm install
 npm run dev
