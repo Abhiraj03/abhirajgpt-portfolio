@@ -4,6 +4,69 @@ import { resumeData, projectsData, contactData, techStackData } from "../data/re
 import { motion, AnimatePresence, easeOut } from 'framer-motion';
 import ProjectCard from './components/ProjectCard';
 
+
+function Typewriter({
+  text,
+  speed = 18,
+  onDone,
+}: {
+  text: string;
+  speed?: number;
+  onDone?: () => void;
+}) {
+  const [shown, setShown] = useState("");
+
+  useEffect(() => {
+    setShown(""); // reset shown text on new text
+
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setShown(text.slice(0, i));
+      if (i >= text.length) {
+        clearInterval(id);
+        onDone?.();
+      }
+    }, speed);
+    return () => clearInterval(id);
+  }, [text, speed, onDone]);
+
+  // Optional skinny caret
+  return (
+    <span className="whitespace-pre-wrap">
+      {shown}
+      <span className="inline-block w-[1px] h-[1em] align-[-0.15em] bg-zinc-300 ml-0.5 animate-pulse" />
+    </span>
+  );
+}
+
+function AssistantReply({
+  lead,
+  body,
+  onDone,
+}: {
+  lead: string;
+  body?: JSX.Element;
+  onDone?: () => void;
+}) {
+  const [typed, setTyped] = useState(false);
+  return (
+    <div className="space-y-4">
+      <p className="text-sm">
+        <Typewriter
+          text={lead}
+          onDone={() => {
+            setTyped(true);
+            onDone?.();
+          }}
+        />
+      </p>
+      {typed && body}
+    </div>
+  );
+}
+
+
 export default function Home() {
   type Msg = { id: string; role: 'user' | 'assistant'; content: JSX.Element | string };
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -22,9 +85,30 @@ export default function Home() {
     await new Promise(res => setTimeout(res, 800));
 
     // add assistant reply based on prompt
-    const reply = promptResponses[prompt] ?? <p>Sorry, I do not have an answer for that yet.</p>;
-    setMessages(prev => [...prev, {id: crypto.randomUUID(), role: 'assistant', content: reply}]);
-    setLoadingPrompt(null); // clear loading state
+    const data = promptResponses[prompt];
+    if (!data) {
+      setMessages(prev => [
+        ...prev,
+        { id: crypto.randomUUID(), role: "assistant", content: "Sorry, I do not have an answer for that yet." },
+      ]);
+      setLoadingPrompt(null);
+      return;
+    }
+
+    // Push assistant message that uses the Typewriter for lead, then shows body
+    const replyEl = (
+      <AssistantReply
+        lead={data.lead}
+        body={data.body}
+        onDone={() => {
+          // unlock buttons only after typing completes
+          setLoadingPrompt(null);
+        }}
+      />
+    );
+
+    setMessages(prev => [...prev, {id: crypto.randomUUID(), role: 'assistant', content: replyEl }]);
+    // setLoadingPrompt(null); // clear loading state
   }
 
   const [contactForm, setContactForm] = useState({name: '', email: '', message: ''});
@@ -33,106 +117,115 @@ export default function Home() {
     setContactForm({...contactForm, [e.target.name]: e.target.value });
   }
 
-  const promptResponses: Record<string, JSX.Element> = {
-    "Who are you?": <p>I&rsquo;m Abhiraj, a software developer passionate about building AI, VR, and full-stack apps.</p>,
-    "What's your resume?": (
-      <div className="space-y-4">
-        <p>{resumeData.message}</p>
-        <a href={resumeData.download} download className="underline text-blue-400 hover:text-blue-300">
-          Download Resume
-        </a>
-        <img
-          src={resumeData.image}
-          alt="Resume preview"
-          className="rounded-lg border border-zinc-700 cursor-pointer hover:opacity-90"
-        />
-      </div>
-    ),
-    "Show me your projects.": (
-      <div className='space-y-6'>
-        <p>Here are some of the projects I&rsquo;ve worked on:</p>
-        <div className='grid gap-6 sm:grid-cols-1 md:grid-cols-2'>
-          {projectsData.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+  const promptResponses: Record<string, { lead: string; body?: JSX.Element }> = {
+    "Who are you?": {
+      lead:
+        "I’m Abhiraj, a software developer passionate about building AI, VR, and full-stack apps.",
+    },
+    "What's your resume?": {
+      lead: resumeData.message,
+      body: (
+        <div className="space-y-4">
+          <a href={resumeData.download} download className="underline text-blue-400 hover:text-blue-300">
+            Download Resume
+          </a>
+          <img
+            src={resumeData.image}
+            alt="Resume preview"
+            className="rounded-lg border border-zinc-700 cursor-pointer hover:opacity-90"
+          />
+        </div>
+      )
+    },
+    "Show me your projects.": {
+      lead: "Here are some of the projects I’ve worked on:",
+      body: (
+        <div className='space-y-6'>
+          <div className='grid gap-6 sm:grid-cols-1 md:grid-cols-2'>
+            {projectsData.map((project, index) => (
+              <ProjectCard key={index} project={project} />
+            ))}
+          </div>
+        </div>
+      )
+    },
+    "What's your tech stack?": {
+      lead: "Here’s what I use across different domains of development:",
+      body: (
+        <div className="space-y-6">
+          {Object.entries(techStackData).map(([category, tools]) => (
+            <div key={category}>
+              <h3 className="text-base font-semibold mb-2">{category}</h3>
+              <div className="flex flex-wrap gap-2">
+                {tools.map((tool, index) => (
+                  <span
+                    key={index}
+                    className="bg-zinc-800 text-sm px-3 py-1 rounded-full text-white border border-zinc-700"
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
-      </div>
-    ),
-    "What's your tech stack?": (
-      <div className="space-y-6">
-        <p>Here&rsquo;s what I use across different domains of development:</p>
+      )
+    },
+    "How to contact you?": {
+      lead: contactData.message,
+      body: (
+        <div className="space-y-6">
+        {/* Social Links */}
+        <div className="flex flex-wrap gap-4">
+          {Object.entries(contactData.links).map(([label, url]) => (
+            <a
+              key={label}
+              href={url}
+              target="_blank"
+              className="bg-zinc-800 px-4 py-2 rounded-lg shadow text-sm hover:bg-zinc-700 transition-all"
+            >
+              {label.charAt(0).toUpperCase() + label.slice(1)}
+            </a>
+          ))}
+        </div>
 
-        {Object.entries(techStackData).map(([category, tools]) => (
-          <div key={category}>
-            <h3 className="text-base font-semibold mb-2">{category}</h3>
-            <div className="flex flex-wrap gap-2">
-              {tools.map((tool, index) => (
-                <span
-                  key={index}
-                  className="bg-zinc-800 text-sm px-3 py-1 rounded-full text-white border border-zinc-700"
-                >
-                  {tool}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    ),
-    "How to contact you?": (
-      <div className="space-y-6">
-      <p>{contactData.message}</p>
-
-      {/* Social Links */}
-      <div className="flex flex-wrap gap-4">
-        {Object.entries(contactData.links).map(([label, url]) => (
-          <a
-            key={label}
-            href={url}
-            target="_blank"
-            className="bg-zinc-800 px-4 py-2 rounded-lg shadow text-sm hover:bg-zinc-700 transition-all"
+        {/* Contact Form */}
+        <form className="space-y-4 max-w-md">
+          <input
+            type="text"
+            name="name"
+            placeholder="Your name"
+            value={contactForm.name}
+            onChange={handleInputChange}
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your email"
+            value={contactForm.email}
+            onChange={handleInputChange}
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
+          />
+          <textarea
+            name="message"
+            placeholder="Your message"
+            rows={4}
+            value={contactForm.message}
+            onChange={handleInputChange}
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
+          />
+          <button
+            type="submit"
+            disabled
+            className="bg-blue-600 px-4 py-2 rounded text-white text-sm opacity-50 cursor-not-allowed"
           >
-            {label.charAt(0).toUpperCase() + label.slice(1)}
-          </a>
-        ))}
+            Send (Coming soon)
+          </button>
+        </form>
       </div>
-
-      {/* Contact Form */}
-      <form className="space-y-4 max-w-md">
-        <input
-          type="text"
-          name="name"
-          placeholder="Your name"
-          value={contactForm.name}
-          onChange={handleInputChange}
-          className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your email"
-          value={contactForm.email}
-          onChange={handleInputChange}
-          className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
-        />
-        <textarea
-          name="message"
-          placeholder="Your message"
-          rows={4}
-          value={contactForm.message}
-          onChange={handleInputChange}
-          className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
-        />
-        <button
-          type="submit"
-          disabled
-          className="bg-blue-600 px-4 py-2 rounded text-white text-sm opacity-50 cursor-not-allowed"
-        >
-          Send (Coming soon)
-        </button>
-      </form>
-    </div>
-    ),
+      )
+    },
     
   }
 
@@ -193,7 +286,7 @@ export default function Home() {
           <motion.div key="chat" {...fadeSlide} ref={listRef} className="flex-1 w-full overflow-y-auto custom-scroll px-4 pt-6">
             <motion.div variants={listVariants} initial={false} animate="animate" className="max-w-4xl mx-auto">
               {messages.map(m => (
-                <motion.div key={m.id} layout variants={listVariants} initial={false} animate="animate" transition={{ duration: 0.18, ease: easeOut }} className={m.role === 'user' ? "flex justify-end mb-6" : "flex justify-start mb-10"}>
+                <motion.div key={m.id} layout variants={msgVariants} initial={false} animate="animate" transition={{ duration: 0.18, ease: easeOut }} className={m.role === 'user' ? "flex justify-end mb-6" : "flex justify-start mb-10"}>
                   <div className={m.role === 'user' ? "bg-gray-700 px-4 py-2 rounded-4xl text-white max-w-sm" 
                       : ""}>
                     {typeof m.content === 'string' ? <span>{m.content}</span> : m.content}
@@ -202,11 +295,11 @@ export default function Home() {
               ))}
 
               {/* Typing Indicator */}
-              {loadingPrompt && (
+              {/* {loadingPrompt && (
                 <motion.div key="typing" layout initial={{ opacity:0 }} animate={{ opacity: 1 }} transition={{ duration:0.15 }} className='flex justify-start'>
                   <div className="text-sm text-zinc-400 font-mono animate-pulse">Typing...</div>
                 </motion.div>
-              )}
+              )} */}
             </motion.div>
           </motion.div>
         )}
