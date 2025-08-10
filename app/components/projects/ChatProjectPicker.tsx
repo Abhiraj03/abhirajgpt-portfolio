@@ -5,6 +5,7 @@ import { motion, AnimatePresence, easeOut } from "framer-motion";
 import ProjectCard from "./ProjectCard";
 import type { Project } from "@/types/project";
 import { projectsByCategory, type ProjectCategory } from "@/data/projects";
+import Link from "next/link";
 
 const fade = {
   initial: { opacity: 0, y: 8 },
@@ -41,12 +42,12 @@ export default function ChatProjectPicker() {
             </button>
           );
         })}
-        <a
+        <Link
           href="/projects"
           className="px-3 py-1.5 text-sm rounded-full border bg-transparent text-zinc-300 border-zinc-700 hover:bg-zinc-800 transition"
         >
           View all
-        </a>
+        </Link>
       </div>
 
       <AnimatePresence mode="wait">
@@ -75,7 +76,7 @@ export default function ChatProjectPicker() {
             )}
 
             <div className="flex">
-                <a
+                <Link
                 href="/projects"
                 className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white hover:bg-zinc-700 transition"
                 >
@@ -84,7 +85,7 @@ export default function ChatProjectPicker() {
                     <path d="M13 5l7 7-7 7v-4H4v-6h9V5z" />
                 </svg>
                 Open full projects page
-                </a>
+                </Link>
             </div>
             </motion.div>
         )}

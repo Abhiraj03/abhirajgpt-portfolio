@@ -1,10 +1,10 @@
 'use client'
 import { JSX, useState, useEffect, useRef } from 'react'
-import { resumeData, projectsData, contactData, techStackData, profileData } from "../data/responses"
+import { resumeData, contactData, techStackData, profileData } from "../data/responses"
 import { motion, AnimatePresence, easeOut } from 'framer-motion';
-import ProjectCard from './components/ProjectCard';
 import Resume from './components/Resume';
 import ChatProjectPicker from './components/projects/ChatProjectPicker';
+import Image from 'next/image';
 
 
 function Typewriter({
@@ -142,9 +142,10 @@ export default function Home() {
           {/* Proof of existence */}
           <div className="flex items-center gap-5">
             <div className="relative w-24 h-24 shrink-0"> {/* Increased size from w-16/h-16 */}
-              <img
+              <Image
                 src={profileData.avatar}
                 alt={`${profileData.name} headshot`}
+                width={96} height={96}
                 className="w-24 h-24 rounded-3xl object-cover ring-2 ring-zinc-700 shadow-lg"
               />
             </div>
@@ -361,9 +362,10 @@ export default function Home() {
           >
             {/* Logo + Title */}
             <div className="flex flex-col items-center gap-3">
-              <img
+              <Image
                 src="/AbhirajGPT.png"       // or "/favicon.ico"
                 alt="AbhirajGPT logo"
+                width={56} height={56}
                 className="w-14 h-14 rounded-xl shadow"
               />
               <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
