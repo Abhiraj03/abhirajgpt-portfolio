@@ -4,17 +4,22 @@ import type { Metadata } from "next";
 import { projects } from "@/data/projects";
 import Link from "next/link";
 
-export function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Metadata {
-  const proj = projects.find((p) => p.slug === params.slug);
+type Params = { slug: string };
+
+// Next.js 15 style: params is a Promise
+export async function generateMetadata(
+  { params }: { params: Promise<Params> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const proj = projects.find((p) => p.slug === slug);
   return { title: proj ? `${proj.title} — Projects` : "Project — AbhirajGPT" };
 }
 
-export default function ProjectDetail({ params }: { params: { slug: string } }) {
-  const proj = projects.find((p) => p.slug === params.slug);
+export default async function ProjectDetail(
+  props: { params: Promise<Params> }
+) {
+  const { slug } = await props.params;
+  const proj = projects.find((p) => p.slug === slug);
   if (!proj) return notFound();
 
   return (
@@ -26,22 +31,29 @@ export default function ProjectDetail({ params }: { params: { slug: string } }) 
       <h1 className="text-3xl font-semibold">{proj.title}</h1>
       <p className="text-zinc-300">{proj.oneLiner}</p>
 
-      <div className={`relative overflow-hidden rounded-2xl border border-zinc-800 ${proj.aspect === "square" ? "aspect-square" : "aspect-video"}`}>
+      <div
+        className={`relative overflow-hidden rounded-2xl border border-zinc-800 ${
+          proj.aspect === "square" ? "aspect-square" : "aspect-video"
+        }`}
+      >
         <video
-            className="h-full w-full object-cover"
-            src={proj.video}
-            poster={proj.poster}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
+          className="h-full w-full object-cover"
+          src={proj.video}
+          poster={proj.poster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
         />
-        </div>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         {proj.skills.map((s) => (
-          <span key={s} className="bg-zinc-800 border border-zinc-700 text-xs text-white px-2 py-1 rounded-full">
+          <span
+            key={s}
+            className="bg-zinc-800 border border-zinc-700 text-xs text-white px-2 py-1 rounded-full"
+          >
             {s}
           </span>
         ))}
@@ -51,14 +63,24 @@ export default function ProjectDetail({ params }: { params: { slug: string } }) 
 
       <div className="flex gap-3">
         {proj.live && (
-          <a href={proj.live} target="_blank" className="underline text-blue-400 hover:text-blue-300">
+          <Link
+            href={proj.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-400 hover:text-blue-300"
+          >
             Live
-          </a>
+          </Link>
         )}
         {proj.repo && (
-          <a href={proj.repo} target="_blank" className="underline text-blue-400 hover:text-blue-300">
+          <Link
+            href={proj.repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-400 hover:text-blue-300"
+          >
             GitHub
-          </a>
+          </Link>
         )}
       </div>
     </div>
