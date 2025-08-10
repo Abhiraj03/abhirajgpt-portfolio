@@ -1,5 +1,5 @@
 export const resumeData = {
-    message: "You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.You can download my resume or view the preview below.",
+    message: "You can download my resume or view the preview below.",
     image: "/resume-preview.jpg",
     download: "/resume.pdf",
 }
@@ -36,3 +36,21 @@ export const techStackData = {
   "AI / ML": ["OpenAI API", "LangChain", "TensorFlow", "Python"],
   "VR / 3D": ["Unity", "C#", "Unreal Engine", "OpenXR"],
 }
+
+export const profileData = {
+  name: "Abhiraj Chaudhary",
+  avatar: "/images/abhiraj.jpg", // put your image in public/images
+  headline: "Software developer focused on AI, VR, and full stack",
+  location: "Tempe, Arizona",
+  bioBullets: [
+    "B.S. Computer Science, Arizona State University, 2025",
+    "Builds AI, VR, and full stack apps",
+    "Comfortable with Unreal, Unity, Next.js, Node, AWS",
+  ],
+  funFacts: [
+    "Daily gym and long walks enjoyer",
+    "Sci fi and anime fan",
+    "Dreams in almost every sleep cycle",
+  ],
+  // reuse your existing contactData.links if you want buttons here
+};
