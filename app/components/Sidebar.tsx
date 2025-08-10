@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiMessageSquare, FiFolder, FiFileText, FiMail, FiUser } from "react-icons/fi";
+import Image from "next/image";
 
 const items = [
   { href: "/", label: "New Chat", icon: FiMessageSquare },
@@ -30,7 +31,13 @@ export default function Sidebar() {
     <aside className="w-64  p-4 flex flex-col" style={{ backgroundColor: "rgb(0,0,0)" }}>
       {/* Logo */}
       <button onClick={reloadHome} className="mb-6 cursor-pointer">
-        <img src="/AbhirajGPT.png" alt="Logo" className="w-12 h-12" />
+        <Image
+          src="/AbhirajGPT.png"
+          alt="Logo"
+          width={48}
+          height={48}
+          className="w-12 h-12"
+        />
       </button>
       <nav className="flex flex-col gap-2">
         {items.map((item) => {
