@@ -93,7 +93,7 @@ export default function ExperienceTimeline({ items }: { items: Experience[] }) {
               <motion.article
                 key={exp.id}
                 data-id={exp.id}
-                ref={el => (refs.current[exp.id] = el)}
+                ref={el => void (refs.current[exp.id] = el)}
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10% 0px" }}
