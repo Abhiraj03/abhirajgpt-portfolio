@@ -5,6 +5,9 @@ import { motion, AnimatePresence, easeOut } from 'framer-motion';
 import Resume from './components/Resume';
 import ChatProjectPicker from './components/projects/ChatProjectPicker';
 import Image from 'next/image';
+import Link from "next/link";
+import { FaEnvelope, FaLinkedin, FaGithub, FaGlobe } from "react-icons/fa";
+import TechStack from './components/TechStack';
 
 
 function Typewriter({
@@ -63,7 +66,7 @@ function AssistantReply({
   const [typed, setTyped] = useState(false);
   return (
     <div className="space-y-4">
-      <p className="text-sm">
+      <p className="text-base md:text-lg leading-relaxed">
         <Typewriter
           text={lead}
           onDone={() => {
@@ -77,6 +80,12 @@ function AssistantReply({
   );
 }
 
+const socialIcons: Record<string, JSX.Element> = {
+  email: <FaEnvelope className="inline-block mr-2" />,
+  linkedin: <FaLinkedin className="inline-block mr-2" />,
+  github: <FaGithub className="inline-block mr-2" />,
+  portfolio: <FaGlobe className="inline-block mr-2" />,
+};
 
 export default function Home() {
   type Msg = { id: string; role: 'user' | 'assistant'; content: JSX.Element | string };
@@ -207,11 +216,24 @@ export default function Home() {
                 key={label}
                 href={url}
                 target="_blank"
-                className="text-xs bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 hover:bg-zinc-700 transition"
+                className="flex items-center text-xs bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 hover:bg-zinc-700 transition"
               >
-                {label}
+                {socialIcons[label.toLowerCase()] ?? null}
+                {label.charAt(0).toUpperCase() + label.slice(1)}
               </a>
             ))}
+          </div>
+
+          <div className="pt-2">
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg transition"
+            >
+              Learn more about me
+              <svg width="16" height="16" viewBox="0 0 24 24" className="fill-current">
+                <path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z"/>
+              </svg>
+            </Link>
           </div>
         </motion.div>
       ),
@@ -243,25 +265,7 @@ export default function Home() {
     },
     "What's your tech stack?": {
       lead: "Here’s what I use across different domains of development:",
-      body: (
-        <div className="space-y-6">
-          {Object.entries(techStackData).map(([category, tools]) => (
-            <div key={category}>
-              <h3 className="text-base font-semibold mb-2">{category}</h3>
-              <div className="flex flex-wrap gap-2">
-                {tools.map((tool, index) => (
-                  <span
-                    key={index}
-                    className="bg-zinc-800 text-sm px-3 py-1 rounded-full text-white border border-zinc-700"
-                  >
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )
+      body: <TechStack data={techStackData}/>,
     },
     "How to contact you?": {
       lead: contactData.message,
@@ -282,37 +286,37 @@ export default function Home() {
         </div>
 
         {/* Contact Form */}
-        <form className="space-y-4 max-w-md">
+        <form
+          action="https://formspree.io/f/mnnzllra"
+          method="POST"
+          className="space-y-4 max-w-md"
+        >
           <input
             type="text"
             name="name"
             placeholder="Your name"
-            value={contactForm.name}
-            onChange={handleInputChange}
+            required
             className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
           />
           <input
             type="email"
             name="email"
             placeholder="Your email"
-            value={contactForm.email}
-            onChange={handleInputChange}
+            required
             className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
           />
           <textarea
             name="message"
             placeholder="Your message"
             rows={4}
-            value={contactForm.message}
-            onChange={handleInputChange}
+            required
             className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
           />
           <button
             type="submit"
-            disabled
-            className="bg-blue-600 px-4 py-2 rounded text-white text-sm opacity-50 cursor-not-allowed"
+            className="bg-blue-600 px-4 py-2 rounded text-white text-sm hover:bg-blue-500 transition"
           >
-            Send (Coming soon)
+            Send
           </button>
         </form>
       </div>
@@ -358,7 +362,7 @@ export default function Home() {
           <motion.div
             key="landing"
             {...fadeSlide}
-            className="flex flex-col items-center justify-center flex-1 text-center gap-8"
+            className="flex flex-col items-center justify-center flex-1 text-center gap-8 mb-20"
           >
             {/* Logo + Title */}
             <div className="flex flex-col items-center gap-3">
@@ -434,7 +438,7 @@ export default function Home() {
                 whileTap={{ scale: 0.97 }}
                 disabled={!!loadingPrompt}
                 onClick={ () => sendPrompt(prompt) }
-                className={`bg-zinc-700 text-sm text-white px-5 py-2 rounded-full hover:bg-zinc-600 transition-all
+                className={`bg-zinc-700 text-sm text-white px-5 py-2 rounded-full cursor-pointer hover:bg-zinc-600 transition-all
                   ${loadingPrompt ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {prompt}
