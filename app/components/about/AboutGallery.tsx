@@ -29,36 +29,36 @@ export default function AboutGallery({ items }: { items: GalleryItem[] }) {
 function Tile({ src, alt, href, size = "square" }: GalleryItem) {
   let colSpan = "col-span-1";
   let rowSpan = "row-span-1";
-
-  if (size === "horizontal") {
-    colSpan = "col-span-2";
-  }
-  if (size === "vertical") {
-    rowSpan = "row-span-2";
-  }
+  if (size === "horizontal") colSpan = "col-span-2";
+  if (size === "vertical") rowSpan = "row-span-2";
 
   const content = (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      transition={{ duration: 0.3 }}
-      className={`relative overflow-hidden ${colSpan} ${rowSpan}`}
+      // keep at zIndex 0 normally, jump above neighbors on hover
+      style={{ zIndex: 0 }}
+      whileHover={{ scale: 1.06, zIndex: 20, boxShadow: "0 12px 36px rgba(0,0,0,.45)" }}
+      transition={{ duration: 0.25 }}
+      className={`relative ${colSpan} ${rowSpan}`}
     >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-        sizes="(max-width: 1024px) 50vw, 25vw"
-      />
+      {/* keep overflow-hidden on the image wrapper to preserve rounded corners if you add them */}
+      <div className="relative w-full h-full overflow-hidden">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 50vw, 25vw"
+        />
+      </div>
     </motion.div>
   );
 
-  if (href) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        {content}
-      </a>
-    );
-  }
-  return content;
+  return href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {content}
+    </a>
+  ) : (
+    content
+  );
 }
+

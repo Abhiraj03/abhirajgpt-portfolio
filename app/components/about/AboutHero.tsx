@@ -1,10 +1,17 @@
+// app/about/page.tsx
 "use client";
 
-import { profileData } from "@/data/responses";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import type { Metadata } from "next";
 import Image from "next/image";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
-/* ------------------------ Updated compact hero ------------------------ */
+import { profileData } from "@/data/responses";
+import AboutGallery from "./AboutGallery";
+
+// Optional page metadata
+export const metadata: Metadata = { title: "About — AbhirajGPT" };
+
+/* ========================== HERO (unchanged) ========================== */
 export function AboutHero() {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -52,7 +59,7 @@ export function AboutHero() {
           </div>
         </motion.div>
 
-        {/* Name and headline only */}
+        {/* Name and headline */}
         <div className="text-center md:text-left">
           <motion.h1
             initial={{ opacity: 0, y: 8 }}
@@ -77,65 +84,14 @@ export function AboutHero() {
   );
 }
 
-/* ------------------------ Detailed sections below ------------------------ */
-
-type Book = { title: string; author?: string; year?: number };
+/* ========================== NEW CONTENT ========================== */
+type Book = { title: string; cover?: string };
 type BooksByGenre = Record<string, Book[]>;
+type Game = { src: string; alt?: string };
+type Badge = { title: string; desc: string; color?: string };
 
-const sampleBio =
-  "I am a full stack developer who ships AI and VR experiences with a focus on fast feedback, clean architecture, and small touches that feel alive. I enjoy owning projects from idea to launch and iterating with real users.";
-
-const sampleAchievements = [
-  "Shipped a Quest build used by one thousand students in a semester",
-  "Built a realtime chat and calling module with MQTT and Tencent SDK",
-  "Scaled a Next.js app on AWS with CI and automated preview environments",
-];
-
-const sampleBooks: BooksByGenre = {
-  Fantasy: [
-    { title: "Mistborn" },
-    { title: "The Name of the Wind" },
-    { title: "The Way of Kings" },
-  ],
-  "Sci Fi": [
-    { title: "Project Hail Mary" },
-    { title: "Dune" },
-    { title: "The Three Body Problem" },
-  ],
-  "Self Help": [
-    { title: "Atomic Habits" },
-    { title: "Deep Work" },
-    { title: "Make Time" },
-  ],
-};
-
-const sampleSkills = [
-  "Systems design",
-  "Perf profiling",
-  "3D level design",
-  "CI with GitHub Actions",
-  "API design",
-  "Observability",
-];
-
-const sampleGames = [
-  "Elden Ring",
-  "Hades",
-  "Portal 2",
-  "Zelda Tears of the Kingdom",
-  "Factorio",
-  "Celeste",
-];
-
-const sampleTech = [
-  { group: "Frontend", items: ["Next.js", "React", "Framer Motion", "Tailwind"] },
-  { group: "Backend", items: ["Go", "Node", "Kotlin", "gRPC", "PostgreSQL"] },
-  { group: "AI", items: ["OpenAI", "LangChain", "RAG", "Embeddings"] },
-  { group: "VR", items: ["Unreal", "Unity", "OpenXR", "Quest"] },
-  { group: "Cloud", items: ["AWS", "Vercel", "Docker", "Terraform"] },
-];
-
-function SectionShell({
+/* Small section shell */
+function Section({
   title,
   children,
 }: {
@@ -150,124 +106,209 @@ function SectionShell({
   );
 }
 
+/* Playing-card style fan of three covers */
+function FannedCovers({ covers }: { covers: string[] }) {
+  const cards = covers.slice(0, 3);
+  const tilts = [-10, 0, 10];
+  const offsets = ["left-0", "left-10", "left-20"];
+  return (
+    <div className="relative h-28 sm:h-32 w-64 mx-auto mb-3 ml-5">
+      {cards.map((c, i) => (
+        <div
+          key={i}
+          className={`absolute top-0 ${offsets[i]} w-20 h-28 sm:w-24 sm:h-32 rounded-lg overflow-hidden shadow-md`}
+          style={{ transform: `rotate(${tilts[i]}deg)` }}
+        >
+          <Image src={c} alt={`book-${i}`} fill className="object-cover" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* Tight single-row games strip, no gaps */
+function GamesStrip({ games }: { games: Game[] }) {
+  return (
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-2 overflow-x-auto">
+      <div className="flex gap-0">
+        {games.map((g, i) => (
+          <div key={i} className="relative w-24 h-24 shrink-0">
+            <Image src={g.src} alt={g.alt ?? `game-${i}`} fill className="object-cover" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Hex badge + honeycomb layout */
+function HexBadge({ title, desc, color = "border-emerald-400" }: Badge) {
+  return (
+    <div className="relative w-44 h-40 flex items-center justify-center">
+      <div
+        className={`w-44 h-40 ${color} border-2 bg-zinc-900/50 text-zinc-100 p-3`}
+        style={{
+          clipPath:
+            "polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)",
+        }}
+      >
+        <div className="h-full flex flex-col items-center justify-center text-center px-2">
+          <div className="text-sm font-semibold">{title}</div>
+          <div className="text-xs text-zinc-300 mt-1">{desc}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Honeycomb({ items }: { items: Badge[] }) {
+  return (
+    <div className="flex flex-wrap gap-x-3 gap-y-0">
+      {items.map((b, i) => (
+        <div key={i} className={`${i % 2 ? "mt-6" : ""}`}>
+          <HexBadge {...b} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* AboutMore composed with your choices */
 export function AboutMore({
-  bio = sampleBio,
-  achievements = sampleAchievements,
-  booksByGenre = sampleBooks,
-  skills = sampleSkills,
-  games = sampleGames,
-  tech = sampleTech,
+  bio,
+  booksByGenre,
+  bookCovers,
+  games,
+  badges,
 }: {
-  bio?: string;
-  achievements?: string[];
-  booksByGenre?: BooksByGenre;
-  skills?: string[];
-  games?: string[];
-  tech?: { group: string; items: string[] }[];
+  bio: string;
+  booksByGenre: BooksByGenre; // three categories: Fantasy, Sci Fi, Self Help
+  bookCovers: Record<string, string[]>; // three covers per category for the fan
+  games: Game[]; // images only, will render in a tight strip
+  badges: Badge[]; // hex badges
 }) {
   return (
     <div className="mt-6 md:mt-10 space-y-6 md:space-y-8">
       {/* Bio */}
-      <SectionShell title="Bio">
+      <Section title="Bio">
         <p className="text-zinc-300 leading-7">{bio}</p>
-      </SectionShell>
+      </Section>
 
-      {/* Achievements */}
-      <SectionShell title="Achievements">
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {achievements.map((a) => (
-            <li
-              key={a}
-              className="flex items-start gap-3 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3"
-            >
-              <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
-              <span className="text-zinc-200">{a}</span>
-            </li>
-          ))}
-        </ul>
-      </SectionShell>
-
-      {/* Books by Genre */}
-      <SectionShell title="Books I Like">
+      {/* Books */}
+      <Section title="Books I Like">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(booksByGenre).map(([genre, list]) => (
             <div
               key={genre}
               className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-4"
             >
-              <h3 className="text-sm font-medium text-zinc-200">{genre}</h3>
-              <ul className="mt-3 space-y-2">
+              <FannedCovers covers={bookCovers[genre] ?? []} />
+              <h3 className="text-base font-medium text-zinc-200 text-center">{genre}</h3>
+              <ul className="mt-3 space-y-1">
                 {list.map((b) => (
-                  <li key={`${genre}-${b.title}`} className="text-zinc-300 text-sm">
+                  <li
+                    key={`${genre}-${b.title}`}
+                    className="text-sm text-zinc-300 text-center"
+                  >
                     {b.title}
-                    {b.author ? <span className="text-zinc-500"> by {b.author}</span> : null}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-      </SectionShell>
+      </Section>
 
-      {/* Additional Skills */}
-      <SectionShell title="Additional Skills">
-        <div className="flex flex-wrap gap-2">
-          {skills.map((s) => (
-            <span
-              key={s}
-              className="text-xs bg-zinc-900 border border-zinc-700 text-white px-2.5 py-1 rounded-full"
-            >
-              {s}
-            </span>
-          ))}
-        </div>
-      </SectionShell>
+      {/* Games strip */}
+      <GamesStrip games={games} />
 
-      {/* Games */}
-      <SectionShell title="Games I Enjoy">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-          {games.map((g) => (
-            <div
-              key={g}
-              className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3 text-center text-sm text-zinc-200"
-            >
-              {g}
-            </div>
-          ))}
+      {/* Achievements as hex badges */}
+      <section className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6 md:p-8">
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Achievements</h2>
+        <div className="mt-4">
+          <Honeycomb items={badges} />
         </div>
-      </SectionShell>
-
-      {/* Tech I Like */}
-      <SectionShell title="Tech I Like Using">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {tech.map(({ group, items }) => (
-            <div key={group} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-4">
-              <h3 className="text-sm font-medium text-zinc-200">{group}</h3>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {items.map((t) => (
-                  <span
-                    key={`${group}-${t}`}
-                    className="text-xs bg-zinc-950 border border-zinc-700 text-white px-2.5 py-1 rounded-full"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </SectionShell>
+      </section>
     </div>
   );
 }
 
-/* ------------------------ Example page wrapper ------------------------ */
-
+/* ========================== PAGE ========================== */
 export default function AboutPage() {
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div className="p-6 max-w-4xl mx-auto space-y-10">
       <AboutHero />
-      <AboutMore />
+
+      {/* Gallery stays as you already have it. Replace items with your actual images. */}
+      <AboutGallery
+        items={[
+          { src: "/images/abhiraj.jpg", alt: "Square", size: "square" },
+          { src: "/images/abhiraj.jpg", alt: "Wide", size: "horizontal" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+          { src: "/images/abhiraj.jpg", alt: "Tall", size: "vertical" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+          { src: "/images/abhiraj.jpg", alt: "Tall", size: "vertical" },
+          { src: "/images/abhiraj.jpg", alt: "Wide", size: "horizontal" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+          { src: "/images/abhiraj.jpg", alt: "Square" },
+        ]}
+      />
+
+      {/* New sections */}
+      <AboutMore
+        bio="I am a full stack developer who ships AI and VR experiences with a focus on fast feedback, clean architecture, and small touches that feel alive. I enjoy owning projects from idea to launch and iterating with real users."
+        booksByGenre={{
+          Fantasy: [
+            { title: "Mistborn", cover: "/covers/mistborn.jpg" },
+            { title: "The Name of the Wind", cover: "/covers/name-of-the-wind.jpeg" },
+            { title: "The Way of Kings", cover: "/covers/way-of-the-kings.jpg" },
+          ],
+          "Sci Fi": [
+            { title: "Project Hail Mary", cover: "/covers/project-hail-mary.jpg" },
+            { title: "Dune", cover: "/covers/dune.jpg" },
+            { title: "The Three Body Problem", cover: "/covers/three-body.jpg" },
+          ],
+          "Self Help": [
+            { title: "Atomic Habits", cover: "/covers/atomic-habits.jpg" },
+            { title: "Deep Work", cover: "/covers/deep-work.jpg" },
+            { title: "Make Time", cover: "/covers/make-time.jpg" },
+          ],
+        }}
+        bookCovers={{
+          Fantasy: [
+            "/covers/mistborn.jpg",
+            "/covers/name-of-the-wind.jpeg",
+            "/covers/way-of-the-kings.jpg",
+          ],
+          "Sci Fi": [
+            "/covers/project-hail-mary.jpg",
+            "/covers/dune.jpg",
+            "/covers/three-body.jpg",
+          ],
+          "Self Help": [
+            "/covers/atomic-habits.jpg",
+            "/covers/deep-work.jpg",
+            "/covers/make-time.jpg",
+          ],
+        }}
+        games={[
+          { src: "/games/elden-ring.jpg", alt: "Elden Ring" },
+          { src: "/games/hades.jpg", alt: "Hades" },
+          { src: "/games/portal2.jpg", alt: "Portal 2" },
+          { src: "/games/zelda-totk.jpg", alt: "Zelda TOTK" },
+          { src: "/games/factorio.jpg", alt: "Factorio" },
+        ]}
+        badges={[
+          { title: "Quest Build Shipped", desc: "Used by one thousand students", color: "border-sky-400" },
+          { title: "Realtime Comms", desc: "MQTT and calling module", color: "border-amber-400" },
+          { title: "Scaled Next.js", desc: "AWS deploy with CI", color: "border-emerald-400" },
+          { title: "Obs and Perf", desc: "Profiling and tracing", color: "border-rose-400" },
+          { title: "AI Prototyper", desc: "RAG and assistants", color: "border-violet-400" },
+        ]}
+      />
     </div>
   );
 }
