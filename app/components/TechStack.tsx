@@ -80,7 +80,7 @@ export default function TechStack({ data }: { data: TechStackData }) {
           <button
             key={cat}
             onClick={() => setActive(cat)}
-            className={`px-3 py-1.5 rounded-full text-sm border transition
+            className={`px-3 py-1.5 rounded-full text-sm border transition cursor-pointer
               ${active === cat ? "bg-blue-600 text-white border-blue-500" : "bg-zinc-800 border-zinc-700 hover:bg-zinc-700"}`}
           >
             {cat}

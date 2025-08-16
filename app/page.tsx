@@ -216,7 +216,7 @@ export default function Home() {
                 key={label}
                 href={url}
                 target="_blank"
-                className="flex items-center text-xs bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 hover:bg-zinc-700 transition"
+                className="flex items-center gap-2 bg-zinc-800 px-5 py-3 rounded-lg shadow text-base hover:bg-zinc-700 transition"
               >
                 {socialIcons[label.toLowerCase()] ?? null}
                 {label.charAt(0).toUpperCase() + label.slice(1)}
@@ -278,8 +278,9 @@ export default function Home() {
               key={label}
               href={url}
               target="_blank"
-              className="bg-zinc-800 px-4 py-2 rounded-lg shadow text-sm hover:bg-zinc-700 transition-all"
+              className="bg-zinc-800 px-5 py-3 rounded-lg shadow text-sm hover:bg-zinc-700 transition-all"
             >
+              {socialIcons[label.toLowerCase()] ?? null}
               {label.charAt(0).toUpperCase() + label.slice(1)}
             </a>
           ))}
@@ -289,32 +290,35 @@ export default function Home() {
         <form
           action="https://formspree.io/f/mnnzllra"
           method="POST"
-          className="space-y-4 max-w-md"
+          className="space-y-4 max-w-xl"
         >
           <input
             type="text"
             name="name"
             placeholder="Your name"
             required
-            className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-5 py-3 text-base text-white focus:outline-none"
           />
+
           <input
             type="email"
             name="email"
             placeholder="Your email"
             required
-            className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-5 py-3 text-base text-white focus:outline-none"
           />
+
           <textarea
             name="message"
             placeholder="Your message"
-            rows={4}
+            rows={5}
             required
-            className="w-full bg-zinc-900 border border-zinc-700 rounded px-4 py-2 text-white text-sm focus:outline-none"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-5 py-3 text-base text-white focus:outline-none"
           />
+
           <button
             type="submit"
-            className="bg-blue-600 px-4 py-2 rounded text-white text-sm hover:bg-blue-500 transition"
+            className="bg-blue-600 px-6 py-3 rounded-lg text-base text-white hover:bg-blue-500 transition"
           >
             Send
           </button>

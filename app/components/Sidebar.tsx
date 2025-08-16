@@ -10,7 +10,7 @@ import Image from "next/image";
 const items = [
   { href: "/", label: "New Chat", icon: FiMessageSquare },
   { href: "/projects", label: "Projects", icon: FiFolder },
-  { href: "/resume", label: "Resume", icon: FiFileText },
+  { href: "/resume", label: "Experience & Skills", icon: FiFileText },
   { href: "/contact", label: "Contact", icon: FiMail },
   { href: "/about", label: "About Me", icon: FiUser },
 ];

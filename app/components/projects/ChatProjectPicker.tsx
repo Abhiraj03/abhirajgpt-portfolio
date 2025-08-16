@@ -33,7 +33,7 @@ export default function ChatProjectPicker() {
             <button
               key={c}
               onClick={() => setSelected(active ? null : c)}
-              className={`px-3 py-1.5 text-sm rounded-full border transition
+              className={`px-3 py-1.5 text-sm rounded-full border transition cursor-pointer
                 ${active
                   ? "bg-zinc-200 text-black border-zinc-300"
                   : "bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700"}`}
@@ -78,7 +78,7 @@ export default function ChatProjectPicker() {
             <div className="flex">
                 <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white hover:bg-zinc-700 transition"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded-lg transition"
                 >
                 {/* arrow icon */}
                 <svg width="16" height="16" viewBox="0 0 24 24" className="fill-current">
