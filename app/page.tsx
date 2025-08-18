@@ -267,7 +267,7 @@ export default function Home() {
       lead: "Here’s what I use across different domains of development:",
       body: <TechStack data={techStackData}/>,
     },
-    "How to contact you?": {
+    "How can I contact you?": {
       lead: contactData.message,
       body: (
         <div className="space-y-6">
@@ -417,7 +417,13 @@ export default function Home() {
             </p>
           </motion.div>
           ) : (
-          <motion.div key="chat" {...fadeSlide} ref={listRef} className="flex-1 w-full overflow-y-auto custom-scroll px-4 pt-6">
+          <motion.div key="chat" {...fadeSlide} ref={listRef} className="flex-1 w-full overflow-y-auto custom-scroll px-4">
+            {/* GPT-like tiny header at top-left of chat */}
+            <div className="sticky top-0 z-10 bg-transparent  ml-5 mb-5">
+              <div className="flex items-center gap-2 text-2xl text-zinc-200">
+                <span className="font-medium">AbhirajGPT</span>
+              </div>
+            </div>
             <motion.div variants={listVariants} initial={false} animate="animate" className="max-w-4xl mx-auto">
               {messages.map(m => (
                 <motion.div key={m.id} layout variants={msgVariants} initial={false} animate="animate" transition={{ duration: 0.18, ease: easeOut }} className={m.role === 'user' ? "flex justify-end mb-6" : "flex justify-start mb-10"}>
@@ -442,7 +448,7 @@ export default function Home() {
                 whileTap={{ scale: 0.97 }}
                 disabled={!!loadingPrompt}
                 onClick={ () => sendPrompt(prompt) }
-                className={`bg-zinc-700 text-sm text-white px-5 py-2 rounded-full cursor-pointer hover:bg-zinc-600 transition-all
+                className={`bg-zinc-700 text-sm text-white px-4 py-2 rounded-full cursor-pointer hover:bg-zinc-600 transition-all
                   ${loadingPrompt ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {prompt}

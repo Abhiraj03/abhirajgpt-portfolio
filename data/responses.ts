@@ -1,3 +1,5 @@
+import { ins } from "framer-motion/client";
+
 export const resumeData = {
     message: "You can download my resume or view the preview below.",
     image: "/resume-preview.jpg",
@@ -28,6 +30,7 @@ export const contactData = {
         linkedin: "https://www.linkedin.com/in/abhiraj-chaudhary/",
         github: "https://github.com/Abhiraj03",
         portfolio: "https://abhirajc.com",
+        instagram: "https://www.instagram.com/_abhiraj_chaudhary_/",
     },
 }
 

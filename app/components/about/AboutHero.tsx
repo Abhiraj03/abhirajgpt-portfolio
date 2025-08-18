@@ -132,7 +132,7 @@ function GamesStrip({ games }: { games: Game[] }) {
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-2 overflow-x-auto">
       <div className="flex gap-0">
         {games.map((g, i) => (
-          <div key={i} className="relative w-24 h-24 shrink-0">
+          <div key={i} className="relative w-32 h-32 shrink-0">
             <Image src={g.src} alt={g.alt ?? `game-${i}`} fill className="object-cover" />
           </div>
         ))}
@@ -142,33 +142,139 @@ function GamesStrip({ games }: { games: Game[] }) {
 }
 
 /* Hex badge + honeycomb layout */
-function HexBadge({ title, desc, color = "border-emerald-400" }: Badge) {
+function HexBadge({
+  title,
+  desc,
+  colorFrom = "#60a5fa", // sky-400
+  colorTo = "#3b82f6",   // blue-500
+  stroke = "#93c5fd",    // sky-300
+  id = "hexgrad",
+}: {
+  title: string;
+  desc: string;
+  colorFrom?: string;
+  colorTo?: string;
+  stroke?: string;
+  id?: string; // unique per badge to avoid gradient ID clashes
+}) {
   return (
-    <div className="relative w-44 h-40 flex items-center justify-center">
-      <div
-        className={`w-44 h-40 ${color} border-2 bg-zinc-900/50 text-zinc-100 p-3`}
-        style={{
-          clipPath:
-            "polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)",
-        }}
-      >
-        <div className="h-full flex flex-col items-center justify-center text-center px-2">
-          <div className="text-sm font-semibold">{title}</div>
-          <div className="text-xs text-zinc-300 mt-1">{desc}</div>
+    <div className="relative w-[150px] h-[165px]">
+      <svg viewBox="0 0 100 112" className="w-full h-full drop-shadow-md">
+        <defs>
+          <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={colorFrom} />
+            <stop offset="100%" stopColor={colorTo} />
+          </linearGradient>
+        </defs>
+
+        {/* outer crisp hex */}
+        <polygon
+          points="50,2 92,24 92,88 50,110 8,88 8,24"
+          fill={`url(#${id})`}
+          stroke={stroke}
+          strokeWidth="2.5"
+        />
+        {/* subtle inner inset for “badge” feel */}
+        <polygon
+          points="50,8 86,28 86,84 50,104 14,84 14,28"
+          fill="rgba(255,255,255,.06)"
+        />
+      </svg>
+
+      {/* text overlay */}
+      <div className="absolute inset-0 flex items-center justify-center text-center px-3">
+        <div className="leading-tight">
+          <div className="text-[18px] font-semibold text-white">{title}</div>
+          <div className="text-[12px] text-white/90 mt-1 mx-1">{desc}</div>
         </div>
       </div>
     </div>
   );
 }
 
-function Honeycomb({ items }: { items: Badge[] }) {
+/* ---------- Honeycomb layout (staggered rows like AWS) ---------- */
+function Honeycomb({
+  items,
+}: {
+  items: { title: string; desc: string; color?: string }[];
+}) {
+  // choose nice outline/gradient pairs per badge (falls back to blue)
+  const palettes = [
+    { from: "#22d3ee", to: "#0ea5e9", stroke: "#67e8f9" }, // cyan → blue
+    { from: "#a78bfa", to: "#7c3aed", stroke: "#c4b5fd" }, // violet
+    { from: "#34d399", to: "#059669", stroke: "#6ee7b7" }, // emerald
+    { from: "#f59e0b", to: "#d97706", stroke: "#fbbf24" }, // amber
+    { from: "#fb7185", to: "#e11d48", stroke: "#fda4af" }, // rose
+  ];
+
+  // Split into rows (pyramid style). Adjust counts as you like.
+  const rows: typeof items[] = [
+    items.slice(0, 3),
+    items.slice(1, 3 + 2), // up to 5 total → second row has 4 if available
+    items.slice(5),        // remaining go to row 3
+  ];
+
   return (
-    <div className="flex flex-wrap gap-x-3 gap-y-0">
-      {items.map((b, i) => (
-        <div key={i} className={`${i % 2 ? "mt-6" : ""}`}>
-          <HexBadge {...b} />
+    <div className="relative mb-5">
+      {/* Row 1 (top center) */}
+      <div className="flex justify-center">
+        {rows[0].map((b, i) => {
+          const p = palettes[(i + 0) % palettes.length];
+          return (
+            <HexBadge
+              key={`r0-${i}`}
+              title={b.title}
+              desc={b.desc}
+              colorFrom={p.from}
+              colorTo={p.to}
+              stroke={p.stroke}
+              id={`hex-r0-${i}`}
+            />
+          );
+        })}
+      </div>
+
+      {/* Row 2 (offset up to interlock with row 1) */}
+      {rows[1].length > 0 && (
+        <div className="flex justify-center gap-1 -mt-8">
+          {rows[1].map((b, i) => {
+            const p = palettes[(i + 1) % palettes.length];
+            return (
+              <div key={`r1-${i}`} className="translate-y-4">
+                <HexBadge
+                  title={b.title}
+                  desc={b.desc}
+                  colorFrom={p.from}
+                  colorTo={p.to}
+                  stroke={p.stroke}
+                  id={`hex-r1-${i}`}
+                />
+              </div>
+            );
+          })}
         </div>
-      ))}
+      )}
+
+      {/* Row 3 (another offset) */}
+      {rows[2].length > 0 && (
+        <div className="flex justify-center gap-6 -mt-8">
+          {rows[2].map((b, i) => {
+            const p = palettes[(i + 2) % palettes.length];
+            return (
+              <div key={`r2-${i}`} className="-translate-y-2">
+                <HexBadge
+                  title={b.title}
+                  desc={b.desc}
+                  colorFrom={p.from}
+                  colorTo={p.to}
+                  stroke={p.stroke}
+                  id={`hex-r2-${i}`}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -193,6 +299,14 @@ export function AboutMore({
       <Section title="Bio">
         <p className="text-zinc-300 leading-7">{bio}</p>
       </Section>
+
+      {/* Achievements as hex badges */}
+      <section className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6 md:p-8">
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Achievements</h2>
+        <div className="mt-4">
+          <Honeycomb items={badges} />
+        </div>
+      </section>
 
       {/* Books */}
       <Section title="Books I Like">
@@ -220,95 +334,9 @@ export function AboutMore({
       </Section>
 
       {/* Games strip */}
-      <GamesStrip games={games} />
-
-      {/* Achievements as hex badges */}
-      <section className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6 md:p-8">
-        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Achievements</h2>
-        <div className="mt-4">
-          <Honeycomb items={badges} />
-        </div>
-      </section>
-    </div>
-  );
-}
-
-/* ========================== PAGE ========================== */
-export default function AboutPage() {
-  return (
-    <div className="p-6 max-w-4xl mx-auto space-y-10">
-      <AboutHero />
-
-      {/* Gallery stays as you already have it. Replace items with your actual images. */}
-      <AboutGallery
-        items={[
-          { src: "/images/abhiraj.jpg", alt: "Square", size: "square" },
-          { src: "/images/abhiraj.jpg", alt: "Wide", size: "horizontal" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-          { src: "/images/abhiraj.jpg", alt: "Tall", size: "vertical" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-          { src: "/images/abhiraj.jpg", alt: "Tall", size: "vertical" },
-          { src: "/images/abhiraj.jpg", alt: "Wide", size: "horizontal" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-          { src: "/images/abhiraj.jpg", alt: "Square" },
-        ]}
-      />
-
-      {/* New sections */}
-      <AboutMore
-        bio="I am a full stack developer who ships AI and VR experiences with a focus on fast feedback, clean architecture, and small touches that feel alive. I enjoy owning projects from idea to launch and iterating with real users."
-        booksByGenre={{
-          Fantasy: [
-            { title: "Mistborn", cover: "/covers/mistborn.jpg" },
-            { title: "The Name of the Wind", cover: "/covers/name-of-the-wind.jpeg" },
-            { title: "The Way of Kings", cover: "/covers/way-of-the-kings.jpg" },
-          ],
-          "Sci Fi": [
-            { title: "Project Hail Mary", cover: "/covers/project-hail-mary.jpg" },
-            { title: "Dune", cover: "/covers/dune.jpg" },
-            { title: "The Three Body Problem", cover: "/covers/three-body.jpg" },
-          ],
-          "Self Help": [
-            { title: "Atomic Habits", cover: "/covers/atomic-habits.jpg" },
-            { title: "Deep Work", cover: "/covers/deep-work.jpg" },
-            { title: "Make Time", cover: "/covers/make-time.jpg" },
-          ],
-        }}
-        bookCovers={{
-          Fantasy: [
-            "/covers/mistborn.jpg",
-            "/covers/name-of-the-wind.jpeg",
-            "/covers/way-of-the-kings.jpg",
-          ],
-          "Sci Fi": [
-            "/covers/project-hail-mary.jpg",
-            "/covers/dune.jpg",
-            "/covers/three-body.jpg",
-          ],
-          "Self Help": [
-            "/covers/atomic-habits.jpg",
-            "/covers/deep-work.jpg",
-            "/covers/make-time.jpg",
-          ],
-        }}
-        games={[
-          { src: "/games/elden-ring.jpg", alt: "Elden Ring" },
-          { src: "/games/hades.jpg", alt: "Hades" },
-          { src: "/games/portal2.jpg", alt: "Portal 2" },
-          { src: "/games/zelda-totk.jpg", alt: "Zelda TOTK" },
-          { src: "/games/factorio.jpg", alt: "Factorio" },
-        ]}
-        badges={[
-          { title: "Quest Build Shipped", desc: "Used by one thousand students", color: "border-sky-400" },
-          { title: "Realtime Comms", desc: "MQTT and calling module", color: "border-amber-400" },
-          { title: "Scaled Next.js", desc: "AWS deploy with CI", color: "border-emerald-400" },
-          { title: "Obs and Perf", desc: "Profiling and tracing", color: "border-rose-400" },
-          { title: "AI Prototyper", desc: "RAG and assistants", color: "border-violet-400" },
-        ]}
-      />
+      <Section title="Games">
+        <GamesStrip games={games} />
+      </Section>
     </div>
   );
 }
