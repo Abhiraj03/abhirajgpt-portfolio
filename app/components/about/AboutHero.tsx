@@ -6,7 +6,6 @@ import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 import { profileData } from "@/data/responses";
-import AboutGallery from "./AboutGallery";
 
 // Optional page metadata
 export const metadata: Metadata = { title: "About — AbhirajGPT" };

@@ -47,7 +47,6 @@ export default function Sidebar() {
 
       // Measure “unsafe” zone at top (logo + nav)
       const logoH = logoRef.current?.getBoundingClientRect().height ?? 0;
-      const navH  = navRef.current?.getBoundingClientRect().height ?? 0;
 
       // Reserve a top zone = logo + part of the nav
       // (we don't need to block the whole nav; ~140px is plenty in most cases)

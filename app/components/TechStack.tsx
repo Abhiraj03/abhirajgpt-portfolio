@@ -58,18 +58,6 @@ export default function TechStack({ data }: { data: TechStackData }) {
     return <TbTool className="opacity-80" />;
   };
 
-  // Split a list into rows like 2,3,2,3...
-  const chunkByPattern = (items: string[], pattern = [2, 3]) => {
-    const out: string[][] = [];
-    let i = 0, p = 0;
-    while (i < items.length) {
-      const take = Math.min(pattern[p % pattern.length], items.length - i);
-      out.push(items.slice(i, i + take));
-      i += take; p++;
-    }
-    return out;
-  };
-
   const isVisible = (cat: string) => active === "All" || active === cat;
 
   return (
