@@ -13,11 +13,12 @@ export default function ProjectsPage() {
         A few things I have built across AR/VR, full stack, AI, and games.
       </p>
 
-      <CategorySection title="AR/VR" items={projectsByCategory["AR/VR"]} />
+      <CategorySection title="Backend" items={projectsByCategory["Backend"]} />
       <CategorySection title="Full Stack" items={projectsByCategory["Full Stack"]} />
       <CategorySection title="AI" items={projectsByCategory["AI"]} />
-      <CategorySection title="Modeling/Animation" items={projectsByCategory["Modeling/Animation"]} />
+      <CategorySection title="AR/VR" items={projectsByCategory["AR/VR"]} />
       <CategorySection title="GameDev" items={projectsByCategory["GameDev"]} />
+      <CategorySection title="Modeling/Animation" items={projectsByCategory["Modeling/Animation"]} />
     </div>
   );
 }

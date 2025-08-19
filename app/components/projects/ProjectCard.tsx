@@ -48,10 +48,10 @@ export default function ProjectCard({ project }: { project: Project }) {
         />
 
         {/* Top gradient */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/70 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/70 to-transparent opacity-0 group-hover:opacity-90 transition-opacity" />
 
         {/* Bottom gradient + details */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent backdrop-blur-[2px]">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 backdrop-blur-0 group-hover:backdrop-blur-sm transition-all duration-300">
           <div className="translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
             <h3 className="text-white text-lg font-semibold leading-tight">{project.title}</h3>
             <p className="text-zinc-300 text-sm mt-1 line-clamp-2">{project.oneLiner}</p>

@@ -11,7 +11,14 @@ export default function AboutPage() {
       <AboutHero />
 
       <AboutMore
-        bio="I am a full stack developer who ships AI and VR experiences with a focus on fast feedback, clean architecture, and small touches that feel alive. I enjoy owning projects from idea to launch and iterating with real users."
+        bio={`I grew up in India and came to the United States to study Computer Science at Arizona State University, searching for purpose and new opportunities. Along the way, I discovered my passion for building things that feel alive — from scalable software to immersive XR experiences.  
+
+- I enjoy creating full stack applications with clean architecture and fast feedback.  
+- I love experimenting with AI, VR, and games to push creative boundaries.  
+- I thrive on taking projects from idea to launch, iterating with real users along the way.
+
+My motivation is simple: keep learning, keep building, and keep turning ideas into experiences that inspire people.`}
+
         booksByGenre={{
           Fantasy: [
             { title: "Mistborn" },
@@ -56,12 +63,17 @@ export default function AboutPage() {
           { src: "/games/Witcher3.jpg", alt: "Witcher3" },
         ]}
         badges={[
-          { title: "Quest Build Shipped", desc: "Used by one thousand students", color: "border-sky-400" },
-          { title: "Realtime Comms", desc: "MQTT and calling module", color: "border-amber-400" },
-          { title: "Scaled Next.js", desc: "AWS deploy with CI", color: "border-emerald-400" },
-          { title: "Obs and Perf", desc: "Profiling and tracing", color: "border-rose-400" },
-          { title: "AI Prototyper", desc: "RAG and assistants", color: "border-violet-400" },
+          { title: "VR App Shipped", desc: "Built and deployed a Quest VR project used by 1,000+ students", color: "border-sky-400" },
+          { title: "Payment Integration", desc: "Integrated PayPal & Stripe, improving success rate by 20%", color: "border-amber-400" },
+          { title: "Web Platform Scaling", desc: "Optimized supply chain platform, cutting load times by 40% and doubling user visits", color: "border-emerald-400" },
+          { title: "AI Prototypes", desc: "Developed RAG-based assistants and AI-driven tools for real-world use cases", color: "border-violet-400" },
+          { title: "Cross-Platform Sharing", desc: "Led feature launch that boosted user engagement by 25% at Tweebaa", color: "border-indigo-400" },
+          { title: "Cloud Deployments", desc: "Deployed full-stack Next.js apps on AWS with CI/CD pipelines", color: "border-teal-400" },
+          { title: "Research & Analysis", desc: "Conducted network failure analysis to improve supply chain resilience", color: "border-rose-400" },
+          { title: "Open Source & Games", desc: "Built and shared projects like Chess vs AI and Cloud Harvester on GitHub", color: "border-yellow-400" }
         ]}
+
+
       />
 
       <AboutGallery

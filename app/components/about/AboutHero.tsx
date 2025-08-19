@@ -192,61 +192,66 @@ function HexBadge({
 }
 
 /* ---------- Honeycomb layout (staggered rows like AWS) ---------- */
-function Honeycomb({
-  items,
-}: {
-  items: { title: string; desc: string; color?: string }[];
-}) {
-  // choose nice outline/gradient pairs per badge (falls back to blue)
+function Honeycomb({ items }: { items: { title: string; desc: string }[] }) {
   const palettes = [
-    { from: "#22d3ee", to: "#0ea5e9", stroke: "#67e8f9" }, // cyan → blue
-    { from: "#a78bfa", to: "#7c3aed", stroke: "#c4b5fd" }, // violet
-    { from: "#34d399", to: "#059669", stroke: "#6ee7b7" }, // emerald
-    { from: "#f59e0b", to: "#d97706", stroke: "#fbbf24" }, // amber
-    { from: "#fb7185", to: "#e11d48", stroke: "#fda4af" }, // rose
+    { from: "#22d3ee", to: "#0ea5e9", stroke: "#67e8f9" },
+    { from: "#a78bfa", to: "#7c3aed", stroke: "#c4b5fd" },
+    { from: "#34d399", to: "#059669", stroke: "#6ee7b7" },
+    { from: "#f59e0b", to: "#d97706", stroke: "#fbbf24" },
+    { from: "#fb7185", to: "#e11d48", stroke: "#fda4af" },
+    { from: "#f472b6", to: "#db2777", stroke: "#f9a8d4" },
+    { from: "#60a5fa", to: "#2563eb", stroke: "#93c5fd" },
+    { from: "#facc15", to: "#ca8a04", stroke: "#fde047" },
+    { from: "#4ade80", to: "#16a34a", stroke: "#86efac" },
+    { from: "#38bdf8", to: "#0284c7", stroke: "#7dd3fc" },
   ];
 
-  // Split into rows (pyramid style). Adjust counts as you like.
-  const rows: typeof items[] = [
-    items.slice(0, 3),
-    items.slice(1, 3 + 2), // up to 5 total → second row has 4 if available
-    items.slice(5),        // remaining go to row 3
-  ];
+  // pair each item with its global index
+  const withIdx = items.map((it, idx) => ({ ...it, _i: idx }));
+
+  // non-overlapping rows
+  const rows = [
+    withIdx.slice(0, 3),   // 0..2
+    withIdx.slice(3, 7),   // 3..6
+    withIdx.slice(7),      // 7..
+  ].filter(r => r.length);
+
+  const pick = (globalIdx: number) => palettes[globalIdx % palettes.length];
 
   return (
     <div className="relative mb-5">
-      {/* Row 1 (top center) */}
+      {/* Row 1 */}
       <div className="flex justify-center">
-        {rows[0].map((b, i) => {
-          const p = palettes[(i + 0) % palettes.length];
+        {rows[0]?.map((b) => {
+          const p = pick(b._i);
           return (
             <HexBadge
-              key={`r0-${i}`}
+              key={`r0-${b._i}`}
               title={b.title}
               desc={b.desc}
               colorFrom={p.from}
               colorTo={p.to}
               stroke={p.stroke}
-              id={`hex-r0-${i}`}
+              id={`hex-${b._i}`}
             />
           );
         })}
       </div>
 
-      {/* Row 2 (offset up to interlock with row 1) */}
-      {rows[1].length > 0 && (
+      {/* Row 2 */}
+      {rows[1] && (
         <div className="flex justify-center gap-1 -mt-8">
-          {rows[1].map((b, i) => {
-            const p = palettes[(i + 1) % palettes.length];
+          {rows[1].map((b) => {
+            const p = pick(b._i);
             return (
-              <div key={`r1-${i}`} className="translate-y-4">
+              <div key={`r1-${b._i}`} className="translate-y-4">
                 <HexBadge
                   title={b.title}
                   desc={b.desc}
                   colorFrom={p.from}
                   colorTo={p.to}
                   stroke={p.stroke}
-                  id={`hex-r1-${i}`}
+                  id={`hex-${b._i}`}
                 />
               </div>
             );
@@ -254,20 +259,20 @@ function Honeycomb({
         </div>
       )}
 
-      {/* Row 3 (another offset) */}
-      {rows[2].length > 0 && (
-        <div className="flex justify-center gap-6 -mt-8">
-          {rows[2].map((b, i) => {
-            const p = palettes[(i + 2) % palettes.length];
+      {/* Row 3 */}
+      {rows[2] && (
+        <div className="flex justify-center gap-6 mt-2">
+          {rows[2].map((b) => {
+            const p = pick(b._i);
             return (
-              <div key={`r2-${i}`} className="-translate-y-2">
+              <div key={`r2-${b._i}`} className="-translate-y-2">
                 <HexBadge
                   title={b.title}
                   desc={b.desc}
                   colorFrom={p.from}
                   colorTo={p.to}
                   stroke={p.stroke}
-                  id={`hex-r2-${i}`}
+                  id={`hex-${b._i}`}
                 />
               </div>
             );
@@ -277,6 +282,7 @@ function Honeycomb({
     </div>
   );
 }
+
 
 /* AboutMore composed with your choices */
 export function AboutMore({
@@ -296,7 +302,7 @@ export function AboutMore({
     <div className="mt-6 md:mt-10 space-y-6 md:space-y-8">
       {/* Bio */}
       <Section title="Bio">
-        <p className="text-zinc-300 leading-7">{bio}</p>
+        <p className="text-zinc-300 leading-7 whitespace-pre-wrap">{bio}</p>
       </Section>
 
       {/* Achievements as hex badges */}
