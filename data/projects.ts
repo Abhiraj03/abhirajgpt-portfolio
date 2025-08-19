@@ -37,7 +37,7 @@ export const projects: Project[] = [
   title: "Patient Management System",
   oneLiner: "Spring Boot microservices for registration, billing, and analytics.",
   skills: ["Spring Boot", "Kafka", "gRPC", "Docker", "JWT"],
-  video: "/videos/patientman.mp4",
+  video: "/videos/patientmaa.mp4",
   poster: "/videos/patientman.png",
   aspect: "video",
   category: "Backend",
