@@ -9,7 +9,7 @@ export const projects: Project[] = [
   title: "AbhirajGPT",
   oneLiner: "Chat-style portfolio that serves projects, resume, and contact data.",
   skills: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
-  video: "/videos/abhirajgpt.mp4",
+  video: "/videos/abhirajgptvid.mp4",
   poster: "/videos/abhirajgpt.jpg",
   aspect: "video",
   category: "Full Stack",
@@ -45,6 +45,19 @@ export const projects: Project[] = [
   content:
     "Designed a microservices system with Spring Boot, Kafka, and gRPC, modeling real clinic flows. Implemented JWT auth, containerized services with Docker, and automated infra to enable fast local CI/CD." 
 }, // :contentReference[oaicite:1]{index=1}
+{
+  slug: "employee-management-system",
+  title: "Employee Management System",
+  oneLiner: "Spring Boot REST API for managing employees with PostgreSQL.",
+  skills: ["Spring Boot", "PostgreSQL", "JPA", "REST API"],
+  video: "/videos/ems.png",
+  poster: "/videos/ems.png",
+  aspect: "video",
+  category: "Backend",
+  repo: "https://github.com/Abhiraj03/ems-api",
+  content:
+    "Developed a Spring Boot application to manage employees with full CRUD operations. Integrated with PostgreSQL database, implemented JPA for persistence, and exposed RESTful endpoints for seamless management. Configured secure local environment and documented project setup for easy deployment."
+},// :contentReference[oaicite:1]{index=1}
 
 {
   slug: "product-inventory-catalog",
@@ -93,7 +106,7 @@ export const projects: Project[] = [
   title: "NextGen Badge",
   oneLiner: "UE5 VR scenarios for empathy & conflict training on Quest 3.",
   skills: ["Unreal Engine 5", "Blueprints", "C++", "MetaHumans", "OpenXR"],
-  video: "/videos/nextgen.mp4",
+  video: "/videos/nextgenvid.mp4",
   poster: "/videos/nextgen.jpg",
   aspect: "video",
   category: "AR/VR",
@@ -107,7 +120,7 @@ export const projects: Project[] = [
   title: "Water Treatment VR",
   oneLiner: "Unity Quest simulation used by 1,000+ students in Dreamscape pods.",
   skills: ["Unity", "C#", "OpenXR", "Timeline", "Performance Profiling"],
-  video: "/videos/watertreat.mp4",
+  video: "/videos/watertreatvid.mp4",
   poster: "/videos/watertreat.jpg",
   aspect: "video",
   category: "AR/VR",
@@ -135,7 +148,7 @@ export const projects: Project[] = [
   title: "AI Powered Mock Interview",
   oneLiner: "Practice live interviews with real time AI questions and speech to text.",
   skills: ["Next.js", "TypeScript", "Drizzle ORM", "PostgreSQL", "Clerk", "Google Gemini API", "Vercel"],
-  video: "/videos/aimockint.mp4",
+  video: "/videos/aimockvid.mp4",
   poster: "/videos/aimockint.jpg",
   aspect: "video",
   category: "AI",
